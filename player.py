@@ -51,7 +51,11 @@ class Player(pygame.sprite.Sprite):
 		if self.frame_index >= len(animation):
 			self.frame_index = 0
 		image = animation[int(self.frame_index)]
-		image = pygame.transform.scale(image, (35, 50))
+
+		if self.status in ('jump', 'fall', 'lose'):
+			image = pygame.transform.scale(image, (73, 110))
+		else:
+			image = pygame.transform.scale(image, (50, 110))
 		if self.facing_right:
 			self.image = image
 		else:
@@ -101,6 +105,7 @@ class Player(pygame.sprite.Sprite):
 	# update the player's state
 	def update(self, player_event):
 		self._get_status()
+
 		if self.life > 0 and not self.game_over:
 			if player_event == "space" and self.on_ground:
 				self._jump()

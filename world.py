@@ -5,6 +5,7 @@ from trap import Trap
 from goal import Goal
 from player import Player
 from game import Game
+from bird import Bird
 
 class World:
 	def __init__(self, world_data, screen):
@@ -22,6 +23,7 @@ class World:
 		self.traps = pygame.sprite.Group()
 		self.player = pygame.sprite.GroupSingle()
 		self.goal = pygame.sprite.GroupSingle()
+		self.birds = pygame.sprite.Group()
 
 		for row_index, row in enumerate(layout):
 			for col_index, cell in enumerate(row):
@@ -38,6 +40,9 @@ class World:
 				elif cell == "G":
 					goal_sprite = Goal((x, y), tile_size)
 					self.goal.add(goal_sprite)
+				elif cell == "B":
+					bird_sprite = Bird((x, y))
+					self.birds.add(bird_sprite)
 
 	# world scroll when the player is walking towards left/right
 	def _scroll_x(self):
@@ -139,5 +144,6 @@ class World:
 		self.player.update(player_event)
 		self.game.show_life(self.player.sprite)
 		self.player.draw(self.screen)
+		self.birds.draw(self.screen)
 
 		self.game.game_state(self.player.sprite, self.goal.sprite)
