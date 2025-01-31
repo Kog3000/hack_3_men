@@ -135,6 +135,9 @@ class World:
 		self.goal.update(self.world_shift)
 		self.goal.draw(self.screen)
 
+		self.birds.update(self.world_shift)
+		self.birds.draw(self.screen)
+
 		self._scroll_x()
 
 		# for player
@@ -144,6 +147,5 @@ class World:
 		self.player.update(player_event)
 		self.game.show_life(self.player.sprite)
 		self.player.draw(self.screen)
-		self.birds.draw(self.screen)
 
 		self.game.game_state(self.player.sprite, self.goal.sprite)
