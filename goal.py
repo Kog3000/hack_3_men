@@ -5,7 +5,7 @@ class Goal(pygame.sprite.Sprite):
 		super().__init__()
 		img_path = 'assets/goal/gate.png'
 		self.image = pygame.image.load(img_path)
-		self.image = pygame.transform.scale(self.image, (size, size))
+		self.image = pygame.transform.scale(self.image, (450, 250))
 		self.rect = self.image.get_rect(topleft = pos)
 
 	# update object position due to world scroll

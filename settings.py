@@ -1,16 +1,16 @@
 world_map = [
-	'                                                                  ',
-	'                                                                  ',
-	'                t  t                                              ',
-	'   B    X  B  XXXXXXXXXs                   XX   X                 ',
-	' tXXXt     XX         XX                XXXX tt XX                ',
-	' XX XX                                      XXXXX                 ',
-	'                                                                  ',
-	'                                                                  ',
-	'          Xt    t           t  t   X                            G ',
-	'        XXXXXX  XXXXs    XXXXXXXXXXX  XX              tt t     XXX',
-	' P   XX  X XX X  X XXXt     X XX  XX  XXX  XXXXXXXXs  XXXXXX      ',
-	'XXXXXXX  X  X X  X  XXXXXXXXX XX  XX  XXX  XX XX XXXXXXX  X       ',
+	'                                                                        ',
+	'                                                                        ',
+	'                 I  t                                                   ',
+	'   B    X     XXXXXXXXXXs                B  XX   X                      ',
+	' tXXXt       X        XX         I      XXXX tt XX                      ',
+	' XX XX      X                  XXXXXX       XXXXX                       ',
+	'                                      X     B                           ',
+	'                                       X    XX                          ',
+	'         Xt                     I  X                               G    ',
+	'        XXXXXX  XXXXs    XXXXXXXXXXX  XX       I  t      t    XXXXXXXXXX',
+	' P   XX  X XX X  X XXXt   I X XX  XX  XXX XXXXXXXXXs  XXXXXX            ',
+	'XXXXXXX  X  X X  X  XXXXXXXXX XX  XX  XXX  XX XX XXXXXXX  X             ',
 ]
 
 tile_size = 50

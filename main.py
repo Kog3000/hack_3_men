@@ -5,7 +5,14 @@ from world import World
 pygame.init()
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Platformer")
+pygame.display.set_caption("3 Богатыря")
+
+pygame.mixer.init()
+pygame.mixer.music.set_volume(0.5)  # громкость от 0.0 до 1.0
+
+pygame.mixer.music.load('sounds/bg_music.mp3')
+
+pygame.mixer.music.play(-1)
 
 class Platformer:
 	def __init__(self, screen, width, height):
@@ -25,16 +32,23 @@ class Platformer:
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
+				elif not world.player.sprite.game_over:
+					if event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_LEFT:
+							self.player_event = "left"
+						if event.key == pygame.K_RIGHT:
+							self.player_event = "right"
+						if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
+							self.player_event = "space"
+						if event.key == pygame.K_w:
+							world.attack()
+					elif event.type == pygame.KEYUP:
+						self.player_event = False
+				else:
+					if event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_SPACE:
+							world = World(world_map, self.screen)
 
-				elif event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_LEFT:
-						self.player_event = "left"
-					if event.key == pygame.K_RIGHT:
-						self.player_event = "right"
-					if event.key == pygame.K_SPACE:
-						self.player_event = "space"
-				elif event.type == pygame.KEYUP:
-					self.player_event = False
 
 			world.update(self.player_event)
 			pygame.display.update()

@@ -1,4 +1,5 @@
 import pygame
+import time
 from settings import tile_size, WIDTH
 from tile import Tile
 from trap import Trap
@@ -6,9 +7,13 @@ from goal import Goal
 from player import Player
 from game import Game
 from bird import Bird
+from insect import Insect
+from cloud import Cloud
 
 class World:
 	def __init__(self, world_data, screen):
+		self.hurt_sound = pygame.mixer.Sound('sounds/hurt.wav')
+		self.gun_sound = pygame.mixer.Sound('sounds/gun.mp3')
 		self.screen = screen
 		self.world_data = world_data
 		self._setup_world(world_data)
@@ -24,6 +29,8 @@ class World:
 		self.player = pygame.sprite.GroupSingle()
 		self.goal = pygame.sprite.GroupSingle()
 		self.birds = pygame.sprite.Group()
+		self.insects = pygame.sprite.Group()
+		self.clouds = pygame.sprite.Group()
 
 		for row_index, row in enumerate(layout):
 			for col_index, cell in enumerate(row):
@@ -38,11 +45,14 @@ class World:
 					player_sprite = Player((x, y))
 					self.player.add(player_sprite)
 				elif cell == "G":
-					goal_sprite = Goal((x, y), tile_size)
+					goal_sprite = Goal((x - 120, y - 175), tile_size)
 					self.goal.add(goal_sprite)
 				elif cell == "B":
 					bird_sprite = Bird((x, y))
 					self.birds.add(bird_sprite)
+				elif cell == "I":
+					ins_sprite = Insect((x, y))
+					self.insects.add(ins_sprite)
 
 	# world scroll when the player is walking towards left/right
 	def _scroll_x(self):
@@ -119,7 +129,33 @@ class World:
 					player.rect.x += tile_size
 				elif player.direction.x > 0 or player.direction.y > 0:
 					player.rect.x -= tile_size
+				self.hurt_sound.play()
 				player.life -= 1
+
+	def _handle_insects(self):
+		player = self.player.sprite
+
+		for sprite in self.insects.sprites():
+			if sprite.rect.colliderect(player.rect):
+				if player.direction.x < 0 or player.direction.y > 0:
+					player.rect.x += tile_size
+				elif player.direction.x > 0 or player.direction.y > 0:
+					player.rect.x -= tile_size
+				player.life -= 1
+
+	def attack(self):
+		player = self.player.sprite
+		cl = Cloud((player.rect.x, player.rect.y), player.facing_right)
+		self.clouds.add(cl)
+		self.gun_sound.play()
+		for i in range(2, 7):
+			cl.animate(player.facing_right)
+			self.clouds.draw(self.screen)
+		for sprite in self.insects.sprites():
+			if sprite.rect.colliderect(cl.rect):
+				sprite.kill()
+		cl.kill()
+
 
 	# updating the game world from all changes commited
 	def update(self, player_event):
@@ -135,17 +171,21 @@ class World:
 		self.goal.update(self.world_shift)
 		self.goal.draw(self.screen)
 
-		self.birds.update(self.world_shift)
-		self.birds.draw(self.screen)
-
 		self._scroll_x()
 
 		# for player
 		self._horizontal_movement_collision()
 		self._vertical_movement_collision()
 		self._handle_traps()
+		self._handle_insects()
 		self.player.update(player_event)
 		self.game.show_life(self.player.sprite)
 		self.player.draw(self.screen)
+		self.birds.update(self.world_shift)
+		self.birds.draw(self.screen)
+		self.insects.update(self.world_shift)
+		self.insects.draw(self.screen)
+
+		self.clouds.draw(self.screen)
 
 		self.game.game_state(self.player.sprite, self.goal.sprite)

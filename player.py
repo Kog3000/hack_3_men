@@ -1,5 +1,6 @@
 import pygame
 from support import import_sprite
+import sys
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, pos):
@@ -26,6 +27,9 @@ class Player(pygame.sprite.Sprite):
 		self.on_ceiling = False
 		self.on_left = False
 		self.on_right = False
+		self.gun = False
+
+
 
 	# gets all the image needed for animating specific player action
 	def _import_character_assets(self):
@@ -42,6 +46,7 @@ class Player(pygame.sprite.Sprite):
 			full_path = character_path + animation
 			self.animations[animation] = import_sprite(full_path)
 
+
 	# animates the player actions
 	def _animate(self):
 		animation = self.animations[self.status]
@@ -53,9 +58,9 @@ class Player(pygame.sprite.Sprite):
 		image = animation[int(self.frame_index)]
 
 		if self.status in ('jump', 'fall', 'lose'):
-			image = pygame.transform.scale(image, (73, 110))
+			image = pygame.transform.scale(image, (73, 115))
 		else:
-			image = pygame.transform.scale(image, (50, 110))
+			image = pygame.transform.scale(image, (80, 115))
 		if self.facing_right:
 			self.image = image
 		else:
